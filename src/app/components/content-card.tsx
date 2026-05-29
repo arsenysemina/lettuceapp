@@ -2,21 +2,26 @@ import { Link } from 'expo-router';
 import { Image, Text, View } from 'react-native';
 
 export type Content = {
-    topics: string[],
-    regions: string[],
-    restaurants: string[],
+    topics?: string[],
+    regions?: string[],
+    restaurants?: string[],
     created_at: string,
-    updated_at: string,
+    updated_at?: string,
     ID: number,
     title: string,
-    featured_image: {url:string,alt_text:string},
+    featured_image: {url:string,alt_text?:string},
     content: string,
-    tagline: string
+    tagline?: string
 }
 
 export default function ContentCard(item:Content) {
   
-  return <Link href={{pathname: '/blog/[id]', params:{id: item.ID}}}>  
+  return <Link href={{pathname: '/blog/[id]', params:{id: item.ID,
+                                                      content: item.content,
+                                                      created_at: item.created_at,
+                                                      title: item.title,
+                                                      featuerd_image_url: item.featured_image.url
+  }}}>  
     <View style={{width: '100%', flexDirection: 'row'}}>
       <Image 
         style= {{flex:5, width: 150, height: 100}}

@@ -11,21 +11,40 @@ export default function Blog() {
   const params = useLocalSearchParams()
 
   const [blog, setBlog] = useState<Content>()
+  const parseContent = (content:string) => {
+    // I'm removing a bunch of <br> tags after elements 
+    // that already cause line breaks bc they look bad in mobile
+    var result:string 
+    result = content.replaceAll("p>\r\n","p>")
+    result = content.replaceAll("h2>\r\n","h2>")
+    result = content.replaceAll("div>\r\n","div>")
+    // every other line break I convert to a <br> so it is displayed by RenderHtml
+    result = content.replaceAll("\r\n","<br>")
+    return result
+  }
 
   const getBlog = async () => {
-    try {
-      const response = await fetch(
-        'https://www.lettuce.com/wp-json/lettuce/blog-content',
-      );
-      const json = await response.json();
-      let result:Content = json.find((item:Content) => item.ID.toString()==params.id)
-      result.content = result.content.replaceAll("p>\r\n","p>")
-      result.content = result.content.replaceAll("h2>\r\n","h2>")
-      result.content = result.content.replaceAll("div>\r\n","div>")
-      result.content = result.content.replaceAll("\r\n","<br>")
-      setBlog(result);
-    } catch (error) {
-      console.error(error);
+    //check if content param is present, otherwise fetch
+    if(params.content) {
+      setBlog({ID:parseInt(params.id as string) as number, 
+              content: parseContent(params.content as string),
+              created_at: params.created_at as string,
+              title: params.title as string,
+              featured_image: {url: params.featuerd_image_url as string}})
+    }
+    else {
+      try {
+        const response = await fetch(
+          'https://www.lettuce.com/wp-json/lettuce/blog-content',
+        );
+        const json = await response.json();
+        let result:Content = json.find((item:Content) => item.ID.toString()==params.id)
+        result.content = parseContent(result.content)
+      
+        setBlog(result);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -37,17 +56,18 @@ export default function Blog() {
   return (
     blog ?
     <SafeAreaView style={{height: Dimensions.get('window').height}}>
-      <ScrollView horizontal={false} style={{overflowX:'hidden'}}>
-        <Image style={{height:150}} source={{uri: blog.featured_image.url}}/>
+      <ScrollView horizontal={false}>
+        <Image style={{height:150}} source={{uri: blog.featured_image.url as string}}/>
         <Text style={styles.header}>{blog.title}</Text>
         <Text style={styles.date}>{blog.created_at}</Text>
         <RenderHtml contentWidth={Dimensions.get('window').width-36} 
                     source={{html: `${blog?.content}`}}
-                    baseStyle={{paddingHorizontal:16, fontSize: 12, fontFamily:'Sans'}}
+                    baseStyle={{paddingHorizontal:16, fontSize: 12}}
                     tagsStyles={{a: {color:'green', textDecorationLine:'none'},
                                 p: {marginVertical:5},
                                 h2: {marginVertical:5},
-                                img: {marginBottom:10}}}/>
+                                img: {marginBottom:10}}}
+                    systemFonts={['Sans-Serif']}/>
       </ScrollView>
 
       <TouchableOpacity 

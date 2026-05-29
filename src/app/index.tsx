@@ -3,7 +3,6 @@ import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ContentCard, { Content } from "./components/content-card";
 
-
 export default function Index() {
   
   const [feed, setFeed] = useState<Content[]>([])
@@ -38,8 +37,8 @@ export default function Index() {
     <FlatList 
       contentContainerStyle = {styles.feed}
       data={tabFeed=='All Articles' ? feed : 
-        tabFeed=='Openings' ? feed.filter(item => item.topics.includes('Openings')) : 
-        feed.filter(item => item.topics.includes('Guides'))} 
+        tabFeed=='Openings' ? feed.filter(item => item.topics?.includes('Openings')) : 
+        feed.filter(item => item.topics?.includes('Guides'))} 
       renderItem={({item}) => <ContentCard {...item}/>}
       />
   )
