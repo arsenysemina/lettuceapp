@@ -71,7 +71,6 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 'auto',
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
