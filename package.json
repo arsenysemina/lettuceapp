@@ -38,7 +38,7 @@
   },
   "private": true,
   "scripts": {
-    "start": "npx expo serve",
+    "start": "node server.js",
     "heroku-postbuild": "npx expo export --platform web"
   }
   
