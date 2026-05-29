@@ -26,7 +26,7 @@ export default function ContentCard(item:Content) {
         alt= {item.featured_image.alt_text}
       />
 
-      {/* this may be a fluke of my javascript version, but 
+      {/* this may be a fluke of my javascript/os, but 
       Date.parse refuses to parse date strings that do not 
       contain a day of the week, whether or not the day is
       correct does not matter */}

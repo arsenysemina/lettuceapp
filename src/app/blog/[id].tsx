@@ -40,7 +40,7 @@ export default function Blog() {
         );
         const json = await response.json();
         let result:Content = json.find((item:Content) => item.ID.toString()==params.id)
-        result.content = parseContent(result.content)
+        result.content = parseContent(result.content) 
       
         setBlog(result);
       } catch (error) {
@@ -84,7 +84,7 @@ export default function Blog() {
 const styles = StyleSheet.create({
   back: {
     position: "absolute",
-    top: 64,
+    top: 16,
     left: 16,
     backgroundColor: "white",
     padding: 7,
