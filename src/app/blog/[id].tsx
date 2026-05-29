@@ -36,8 +36,8 @@ export default function Blog() {
 
   return (
     blog ?
-    <SafeAreaView style={{overflowX:'hidden', height: Dimensions.get('window').height}}>
-      <ScrollView>
+    <SafeAreaView style={{height: Dimensions.get('window').height}}>
+      <ScrollView horizontal={false} style={{overflowX:'hidden'}}>
         <Image style={{height:150}} source={{uri: blog.featured_image.url}}/>
         <Text style={styles.header}>{blog.title}</Text>
         <Text style={styles.date}>{blog.created_at}</Text>
