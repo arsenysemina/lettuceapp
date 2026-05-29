@@ -73,7 +73,7 @@ export default function Blog() {
 
       <TouchableOpacity 
         style={styles.back} 
-        onPress={() => router.back()}
+        onPress={() => router.canGoBack() ? router.back() : router.navigate('/')}
       >
         <Image style={{}} source={require('../../../assets/images/back.svg')}/>
       </TouchableOpacity>

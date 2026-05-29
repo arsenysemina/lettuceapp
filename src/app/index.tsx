@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ContentCard from "../components/content-card";
 import useFeed from "../utils/useFeed";
@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingHorizontal: 16,
     fontSize: 28,
-    marginBottom: 24
+    marginBottom: 24,
+    marginTop: Platform.OS=='web' ? 16 : 0
   },
   tabs: {
     paddingHorizontal: 16,
