@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Dimensions, FlatList, Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ContentCard from "../components/content-card";
 import useFeed from "../utils/useFeed";
@@ -51,7 +51,7 @@ export default function Index() {
   )
 
   return (
-    <SafeAreaView style={{width: Dimensions.get('window').width > 500 ? 500 : Dimensions.get('window').width, ...styles.container}}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.header}>
         Newsfeed
       </Text>
@@ -70,7 +70,6 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 'auto',
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",

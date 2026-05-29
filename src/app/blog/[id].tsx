@@ -10,7 +10,6 @@ import useFeed from "../../utils/useFeed";
 export default function Blog() {
   const router = useRouter()
   const params = useLocalSearchParams()
-  const contentWidth = Dimensions.get('window').width > 500 ? 500 : Dimensions.get('window').width
 
   const {feed} = useFeed()
   const [blog, setBlog] = useState<Content>()
@@ -57,12 +56,12 @@ export default function Blog() {
 
   return (
     blog ?
-    <SafeAreaView style={{width: contentWidth, marginHorizontal:'auto',height: Dimensions.get('window').height}}>
+    <SafeAreaView style={{width: Dimensions.get('window').width, marginHorizontal:'auto',height: Dimensions.get('window').height}}>
       <ScrollView horizontal={false}>
         <Image style={{height:150}} source={{uri: blog.featured_image.url as string}}/>
         <Text style={styles.header}>{blog.title}</Text>
         <Text style={styles.date}>{blog.created_at}</Text>
-        <RenderHtml contentWidth={contentWidth-36} 
+        <RenderHtml contentWidth={Dimensions.get('window').width-36} 
                     source={{html: `${blog?.content}`}}
                     baseStyle={{paddingHorizontal:16, fontSize: 12}}
                     tagsStyles={{a: {color:'green', textDecorationLine:'none'},
