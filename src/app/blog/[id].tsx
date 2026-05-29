@@ -1,13 +1,12 @@
 import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { Dimensions, Image, Platform, ScrollView, StyleSheet } from "react-native";
+import { Dimensions, Image, ScrollView, StyleSheet, Text } from "react-native";
 import RenderHtml from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Content } from "../components/content-card";
 
 
 export default function Blog() {
-
   const params = useLocalSearchParams()
   
   const blogStyle:string = `
@@ -29,15 +28,7 @@ export default function Blog() {
       );
       const json = await response.json();
       let result:Content = json.find((item:Content) => item.ID.toString()==params.id)
-      result.content = `<img src="${result.featured_image.url}"
-                              style="position:relative;
-                              object-fit: cover;
-                              left:-16px;
-                              height: 150px;
-                              width:${Dimensions.get('window').width}px">
-                        <h1>${result.title}</h1>
-                        ${result.created_at}\r\n\r\n` + result.content
-      result.content += blogStyle
+      result.content = result.content.replaceAll(">\r\n",">")
       result.content = result.content.replaceAll("\r\n","<br>")
       setBlog(result);
     } catch (error) {
@@ -51,43 +42,55 @@ export default function Blog() {
 
 
   return (
-    <SafeAreaView>
-      <ScrollView style={styles.container}>
-        {/* <RenderHtml 
-          contentWidth={Dimensions.get('window').width} 
-          source={{html: `${blog?.content}`}}
-          tagsStyles={tagsStyles}/> */}
-        <Link href={{pathname: '/'}}><Image style={styles.back} source={require('../../../assets/images/back.svg')}/></Link>
-        {Platform.OS == 'web' ? 
-          <iframe style={{border: "none",height:Dimensions.get('window').height}} 
-                  srcDoc={blog?.content}></iframe> : 
-            <RenderHtml source={{html: `${blog?.content}`}}/>
-            }
+    blog ?
+    <SafeAreaView style={{height: Dimensions.get('window').height}}>
+      <Link style={{position: "absolute",top: 64,left: 16, zIndex:11}} href={{pathname: '/'}}>
+        <Image style={styles.back} source={require('../../../assets/images/back.svg')}/>
+      </Link>
+      
+      <ScrollView>
+        <Image style={{height:150}} source={{uri: blog.featured_image.url}}/>
+        <Text style={styles.header}>{blog.title}</Text>
+        <Text style={styles.date}>{blog.created_at}</Text>
+        <RenderHtml contentWidth={Dimensions.get('window').width-36} 
+                    source={{html: `${blog?.content}`}}
+                    baseStyle={{paddingHorizontal:16, fontSize: 12}}
+                    tagsStyles={{a: {color:'green', textDecorationLine:'none'},
+                                p: {marginVertical:5},
+                                h2: {marginVertical:5},
+                                img: {marginBottom:10}}}/>
       </ScrollView>
-    </SafeAreaView>
+
+      {/* <TouchableOpacity 
+        style={styles.back} 
+        onPress={() => router.navigate('/')}
+      >
+        <Image source={require('../../../assets/images/back.svg')}/>
+      </TouchableOpacity> */}
+    </SafeAreaView> : ''
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column"
-  },
-  header: {
-    fontWeight: 'bold',
-    paddingHorizontal: 16,
-    fontSize: 28,
-    marginBottom: 24
-  },
   back: {
-    position: "absolute",
-    top: 16,
-    left: 16,
     backgroundColor: "white",
     padding: 7,
     borderRadius: 30,
     borderWidth: 10,
-    borderColor: "white"
+    borderColor: "white",
+    zIndex: 10
+  },
+  header: {
+    paddingHorizontal:16,
+    marginVertical: 10,
+    fontWeight: 'bold',
+    fontSize: 18
+  },
+  date: {
+    paddingHorizontal:16,
+    marginBottom: 16,
+    fontSize: 12
   }
+
 
 });
