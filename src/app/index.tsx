@@ -52,7 +52,7 @@ export default function Index() {
   )
 
   return (
-    <SafeAreaView style={{width:width,...styles.container}}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.header}>
         Newsfeed
       </Text>
