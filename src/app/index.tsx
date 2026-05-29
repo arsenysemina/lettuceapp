@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Content, ContentCard } from "./components/content-card";
+import ContentCard, { Content } from "./components/content-card";
 
 
 export default function Index() {
@@ -29,7 +29,7 @@ export default function Index() {
   const Tab = ({...props}:TabProps) => (
     <Pressable style={[styles.tab, {width:props.width}]} onPress={() => { setTab(props.text) }}>
       <Text style={tab==props.text ? styles.active : styles.inactive}>{props.text}</Text>
-      <Text style={tab==props.text ? styles.underline : ''}/>
+      <Text style={tab==props.text ? styles.underline : ''}> </Text>
     </Pressable>
   )
 
