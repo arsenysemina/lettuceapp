@@ -51,7 +51,7 @@ export default function Index() {
   )
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{width: Dimensions.get('window').width > 500 ? 500 : Dimensions.get('window').width, ...styles.container}}>
       <Text style={styles.header}>
         Newsfeed
       </Text>
@@ -70,7 +70,6 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
-    width: Dimensions.get('window').width > 500 ? 500 : Dimensions.get('window').width,
     marginHorizontal: 'auto',
     flex: 1,
     flexDirection: "column",
