@@ -1,23 +1,14 @@
-import { Link, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Dimensions, Image, ScrollView, StyleSheet, Text } from "react-native";
+import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import RenderHtml from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Content } from "../components/content-card";
 
 
 export default function Blog() {
+  const router = useRouter()
   const params = useLocalSearchParams()
-  
-  const blogStyle:string = `
-    <style>
-      img {width: ${(Dimensions.get('window').width-32)}px; height: unset;} 
-      body {margin: 0px; padding: 0 16px; font-family: Sans; text-align: left; font-size: 12px;}
-      a {color: #258834; text-decoration: none;}
-      p {margin: 0;}
-      h2 {margin: 0;}
-      html {overflow-x:hidden;}
-    </style>`
 
   const [blog, setBlog] = useState<Content>()
 
@@ -28,7 +19,9 @@ export default function Blog() {
       );
       const json = await response.json();
       let result:Content = json.find((item:Content) => item.ID.toString()==params.id)
-      result.content = result.content.replaceAll(">\r\n",">")
+      result.content = result.content.replaceAll("p>\r\n","p>")
+      result.content = result.content.replaceAll("h2>\r\n","h2>")
+      result.content = result.content.replaceAll("div>\r\n","div>")
       result.content = result.content.replaceAll("\r\n","<br>")
       setBlog(result);
     } catch (error) {
@@ -44,10 +37,6 @@ export default function Blog() {
   return (
     blog ?
     <SafeAreaView style={{height: Dimensions.get('window').height}}>
-      <Link style={{position: "absolute",top: 64,left: 16, zIndex:11}} href={{pathname: '/'}}>
-        <Image style={styles.back} source={require('../../../assets/images/back.svg')}/>
-      </Link>
-      
       <ScrollView>
         <Image style={{height:150}} source={{uri: blog.featured_image.url}}/>
         <Text style={styles.header}>{blog.title}</Text>
@@ -61,18 +50,21 @@ export default function Blog() {
                                 img: {marginBottom:10}}}/>
       </ScrollView>
 
-      {/* <TouchableOpacity 
+      <TouchableOpacity 
         style={styles.back} 
         onPress={() => router.navigate('/')}
       >
-        <Image source={require('../../../assets/images/back.svg')}/>
-      </TouchableOpacity> */}
+        <Image style={{}} source={require('../../../assets/images/back.svg')}/>
+      </TouchableOpacity>
     </SafeAreaView> : ''
   );
 }
 
 const styles = StyleSheet.create({
   back: {
+    position: "absolute",
+    top: 64,
+    left: 16,
     backgroundColor: "white",
     padding: 7,
     borderRadius: 30,
