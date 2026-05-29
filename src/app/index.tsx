@@ -76,7 +76,9 @@ const styles = StyleSheet.create({
   },
   tabs: {
     paddingHorizontal: 16,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderColor: '#D3D3D3'
   },
   tab: {
     flexDirection: 'column'
@@ -91,12 +93,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   underline: {
-    marginTop: 12,
+    marginTop: 13 ,
     lineHeight: 5,
     justifyContent: 'flex-end',
     backgroundColor: '#258834'
   },
   feed: {
+    marginTop: 16,
     paddingHorizontal: 16,
     gap: 16
   }

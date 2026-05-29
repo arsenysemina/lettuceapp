@@ -36,14 +36,14 @@ export default function Blog() {
 
   return (
     blog ?
-    <SafeAreaView style={{height: Dimensions.get('window').height}}>
+    <SafeAreaView style={{overflowX:'hidden', height: Dimensions.get('window').height}}>
       <ScrollView>
         <Image style={{height:150}} source={{uri: blog.featured_image.url}}/>
         <Text style={styles.header}>{blog.title}</Text>
         <Text style={styles.date}>{blog.created_at}</Text>
         <RenderHtml contentWidth={Dimensions.get('window').width-36} 
                     source={{html: `${blog?.content}`}}
-                    baseStyle={{paddingHorizontal:16, fontSize: 12}}
+                    baseStyle={{paddingHorizontal:16, fontSize: 12, fontFamily:'Sans'}}
                     tagsStyles={{a: {color:'green', textDecorationLine:'none'},
                                 p: {marginVertical:5},
                                 h2: {marginVertical:5},
