@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { FlatList, Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Platform, Pressable, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ContentCard from "../components/content-card";
 import useFeed from "../utils/useFeed";
 
 export default function Index() {
+  const {width,height} = useWindowDimensions()
 
   // stores the currently active tab
   const [tab, setTab] = useState('All Articles')
@@ -51,7 +52,7 @@ export default function Index() {
   )
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{width:width,...styles.container}}>
       <Text style={styles.header}>
         Newsfeed
       </Text>
@@ -70,6 +71,7 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
+    marginHorizontal: 'auto',
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",

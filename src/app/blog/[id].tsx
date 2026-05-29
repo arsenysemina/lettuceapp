@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Dimensions, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, useWindowDimensions } from "react-native";
 import RenderHtml from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Content } from "../../components/content-card";
@@ -8,6 +8,7 @@ import useFeed from "../../utils/useFeed";
 
 
 export default function Blog() {
+  const {width,height} = useWindowDimensions()
   const router = useRouter()
   const params = useLocalSearchParams()
 
@@ -56,12 +57,12 @@ export default function Blog() {
 
   return (
     blog ?
-    <SafeAreaView style={{width: Dimensions.get('window').width, marginHorizontal:'auto',height: Dimensions.get('window').height}}>
+    <SafeAreaView style={{width: width, marginHorizontal:'auto',height: height}}>
       <ScrollView horizontal={false}>
         <Image style={{height:150}} source={{uri: blog.featured_image.url as string}}/>
         <Text style={styles.header}>{blog.title}</Text>
         <Text style={styles.date}>{blog.created_at}</Text>
-        <RenderHtml contentWidth={Dimensions.get('window').width-36} 
+        <RenderHtml contentWidth={width-36} 
                     source={{html: `${blog?.content}`}}
                     baseStyle={{paddingHorizontal:16, fontSize: 12}}
                     tagsStyles={{a: {color:'green', textDecorationLine:'none'},
