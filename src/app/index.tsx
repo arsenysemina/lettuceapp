@@ -7,8 +7,9 @@ import useFeed from "../utils/useFeed";
   
 export default function Index() {
 
-  // const [feed, setFeed] = useState<Content[]>([])
+  // stores the currently active tab
   const [tab, setTab] = useState('All Articles')
+  // zustand store for the blog feed
   const {feed, setFeed} = useFeed()
 
   const getFeed = async () => {
@@ -27,6 +28,10 @@ export default function Index() {
     getFeed();
   }, []);
 
+  // I'm passing in the width for the tabs so that they don't push each other
+  // around whenever one of them expands from the text becoming bold
+  // in order to add a thick underline that is apart from the text I added
+  // an extra Text component
   type TabProps = {width:number, text:string}; 
   const Tab = ({...props}:TabProps) => (
     <Pressable style={[styles.tab, {width:props.width}]} onPress={() => { setTab(props.text) }}>

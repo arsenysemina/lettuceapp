@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Dimensions, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import RenderHtml from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Content } from "../../components/content-card";
@@ -84,7 +84,7 @@ export default function Blog() {
 const styles = StyleSheet.create({
   back: {
     position: "absolute",
-    top: 16,
+    top: Platform.OS=='web' ? 16 : 80,
     left: 16,
     backgroundColor: "white",
     padding: 7,
