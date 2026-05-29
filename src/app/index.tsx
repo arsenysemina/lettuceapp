@@ -6,7 +6,6 @@ import useFeed from "../utils/useFeed";
 
 const contentWidth = Dimensions.get('window').width > 500 ? 500 : Dimensions.get('window').width
 
-  
 export default function Index() {
 
   // stores the currently active tab

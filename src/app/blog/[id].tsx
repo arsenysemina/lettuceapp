@@ -57,7 +57,7 @@ export default function Blog() {
 
   return (
     blog ?
-    <SafeAreaView style={{maxWidth: contentWidth, marginHorizontal:'auto',height: Dimensions.get('window').height}}>
+    <SafeAreaView style={{width: contentWidth, marginHorizontal:'auto',height: Dimensions.get('window').height}}>
       <ScrollView horizontal={false}>
         <Image style={{height:150}} source={{uri: blog.featured_image.url as string}}/>
         <Text style={styles.header}>{blog.title}</Text>
