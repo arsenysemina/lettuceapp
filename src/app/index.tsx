@@ -4,8 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ContentCard from "../components/content-card";
 import useFeed from "../utils/useFeed";
 
-const contentWidth = Dimensions.get('window').width > 500 ? 500 : Dimensions.get('window').width
-
 export default function Index() {
 
   // stores the currently active tab
@@ -72,7 +70,7 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   container: {
-    width: contentWidth,
+    width: Dimensions.get('window').width > 500 ? 500 : Dimensions.get('window').width,
     marginHorizontal: 'auto',
     flex: 1,
     flexDirection: "column",
