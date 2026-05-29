@@ -3,14 +3,17 @@ import { useEffect, useState } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import RenderHtml from 'react-native-render-html';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Content } from "../components/content-card";
+import { Content } from "../../components/content-card";
+import useFeed from "../../utils/useFeed";
 
 
 export default function Blog() {
   const router = useRouter()
   const params = useLocalSearchParams()
 
+  const {feed} = useFeed()
   const [blog, setBlog] = useState<Content>()
+
   const parseContent = (content:string) => {
     // I'm removing a bunch of <br> tags after elements 
     // that already cause line breaks bc they look bad in mobile
@@ -25,12 +28,10 @@ export default function Blog() {
 
   const getBlog = async () => {
     //check if content param is present, otherwise fetch
-    if(params.content) {
-      setBlog({ID:parseInt(params.id as string) as number, 
-              content: parseContent(params.content as string),
-              created_at: params.created_at as string,
-              title: params.title as string,
-              featured_image: {url: params.featuerd_image_url as string}})
+    const findBlog = feed.find((item)=>item.ID.toString()==params.id)
+    if(findBlog) {
+      findBlog.content = parseContent(findBlog.content)
+      setBlog(findBlog)
     }
     else {
       try {
@@ -72,7 +73,7 @@ export default function Blog() {
 
       <TouchableOpacity 
         style={styles.back} 
-        onPress={() => router.navigate('/')}
+        onPress={() => router.back()}
       >
         <Image style={{}} source={require('../../../assets/images/back.svg')}/>
       </TouchableOpacity>

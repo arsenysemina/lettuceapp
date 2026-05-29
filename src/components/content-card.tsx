@@ -16,12 +16,7 @@ export type Content = {
 
 export default function ContentCard(item:Content) {
   
-  return <Link href={{pathname: '/blog/[id]', params:{id: item.ID,
-                                                      content: item.content,
-                                                      created_at: item.created_at,
-                                                      title: item.title,
-                                                      featuerd_image_url: item.featured_image.url
-  }}}>  
+  return <Link href={{pathname: '/blog/[id]', params:{id: item.ID}}}>  
     <View style={{width: '100%', flexDirection: 'row'}}>
       <Image 
         style= {{flex:5, width: 150, height: 100}}

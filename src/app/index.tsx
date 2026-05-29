@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ContentCard, { Content } from "./components/content-card";
+import ContentCard from "../components/content-card";
+import useFeed from "../utils/useFeed";
 
-export default function Index() {
   
-  const [feed, setFeed] = useState<Content[]>([])
+export default function Index() {
+
+  // const [feed, setFeed] = useState<Content[]>([])
   const [tab, setTab] = useState('All Articles')
+  const {feed, setFeed} = useFeed()
 
   const getFeed = async () => {
     try {
@@ -14,7 +17,7 @@ export default function Index() {
         'https://www.lettuce.com/wp-json/lettuce/blog-content',
       );
       const json = await response.json();
-      setFeed(json);
+      setFeed(json)
     } catch (error) {
       console.error(error);
     }
