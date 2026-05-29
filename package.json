@@ -19,6 +19,7 @@
     "expo-system-ui": "~56.0.5",
     "expo-updates": "~56.0.17",
     "expo-web-browser": "~56.0.5",
+    "express": "^5.2.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.85.3",
@@ -35,5 +36,10 @@
     "@types/react": "~19.2.2",
     "typescript": "~6.0.3"
   },
-  "private": true
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "heroku-postbuild": "npx expo export --platform web"
+  }
+  
 }
