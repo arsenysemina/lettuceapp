@@ -1,16 +1,28 @@
 import { useEffect, useState } from "react";
-import { FlatList, Platform, Pressable, StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import {
+  ActivityIndicator, FlatList, Platform, Pressable,
+  StyleSheet, Text,
+  TextInput,
+  useWindowDimensions, View
+} from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ContentCard from "../components/content-card";
+import ContentCard, { Content } from "../components/content-card";
 import useFeed from "../utils/useFeed";
 
 export default function Index() {
   const {width,height} = useWindowDimensions()
 
+  const allArticles = 'All Articles'
+
   // stores the currently active tab
-  const [tab, setTab] = useState('All Articles')
+  const [tab, setTab] = useState(allArticles)
   // zustand store for the blog feed
   const {feed, setFeed} = useFeed()
+
+  const [tabs, setTabs] = useState([''])
+
+  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
 
   const getFeed = async () => {
     try {
@@ -19,6 +31,8 @@ export default function Index() {
       );
       const json = await response.json();
       setFeed(json)
+      setLoading(false)
+      setTabs(generateTabs(json))
     } catch (error) {
       console.error(error);
     }
@@ -27,6 +41,37 @@ export default function Index() {
   useEffect(() => {
     getFeed();
   }, []);
+
+  function generateTabs(json:Content[]):string[] {
+    let allTabs: {[index:string]: number} = {}
+    json.forEach((element) => {
+      element.topics?.forEach((topic) => {
+        if(topic in allTabs) {
+          allTabs[topic] += 1
+        }
+        else {
+          allTabs[topic] = 1
+        }
+      })
+    })
+    
+    let arr = Object.entries(allTabs).sort((b,a) => a[1] - b[1])
+    return [allArticles, arr[0][0],arr[1][0]]
+  }
+
+  function filterFeed():Content[] {
+      let searchedFeed = feed.filter(item => item.title?.toLowerCase().includes(search.toLowerCase()))
+      switch(tab) {
+        case tabs[0]:
+          return searchedFeed
+        case tabs[1]:
+          return searchedFeed.filter(item => item.topics?.includes(tabs[1]))
+        case tabs[2]:
+          return searchedFeed.filter(item => item.topics?.includes(tabs[2]))
+      default:
+        return searchedFeed
+      }
+  }
 
   // I'm passing in the width for the tabs so that they don't push each other
   // around whenever one of them expands from the text becoming bold
@@ -40,15 +85,17 @@ export default function Index() {
     </Pressable>
   )
 
-  type FeedProps = {tabFeed:string}
-  const Feed = ({tabFeed}:FeedProps) => (
+  const Feed = () => (
     <FlatList 
+      ListEmptyComponent={<Text>I'm Empty, Boss</Text>}
       contentContainerStyle = {styles.feed}
-      data={tabFeed=='All Articles' ? feed : 
-        tabFeed=='Openings' ? feed.filter(item => item.topics?.includes('Openings')) : 
-        feed.filter(item => item.topics?.includes('Guides'))} 
+      data={filterFeed()} 
       renderItem={({item}) => <ContentCard {...item}/>}
       />
+  )
+
+  const Spinner = () => (
+    <ActivityIndicator style={styles.spinner}/>
   )
 
   return (
@@ -56,24 +103,40 @@ export default function Index() {
       <Text style={styles.header}>
         Newsfeed
       </Text>
+      <TextInput 
+        style={styles.search} 
+        onChangeText={setSearch}
+        value={search}
+      />
       
       <View style={styles.tabs}>
-        <Tab width={90} text='All Articles'/>
-        <Tab width={80} text='Openings'/>
-        <Tab width={70} text='Guides'/>
+        <Tab width={90} text={tabs[0]}/>
+        <Tab width={80} text={tabs[1]}/>
+        <Tab width={70} text={tabs[2]}/>
       </View>
 
-      <Feed tabFeed={tab}/>
+      {loading ? <Spinner/> :
+        <Feed/> 
+      }
       
-    </SafeAreaView>
+    </SafeAreaView> 
   );
 }
 
 const styles = StyleSheet.create({
+  search: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  spinner: {
+    marginTop: 24
+  },
   container: {
     flex: 1,
     flexDirection: "column",
-    justifyContent: "center",
+    // justifyContent: "center",
   },
   header: {
     fontWeight: 'bold',
